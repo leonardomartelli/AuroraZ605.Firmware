@@ -21,6 +21,8 @@ which based on Tonokip RepRap firmware rewrite based off of Hydra-mmm firmware.
 #ifndef RF_DISPLAY
 #define RF_DISPLAY
 
+#define UI_FONT_DEFAULT_RU ISO_6x10
+#define UI_FONT_SMALL_RU ISO_5x7
 
 #if FEATURE_CONTROLLER == UICONFIG_CONTROLLER
 #include "uiconfig.h"
@@ -283,8 +285,13 @@ void uiCheckSlowKeys(uint16_t &action) {}
 
 #undef BEEPER_PIN
 #define BEEPER_PIN             27
+//#undef U8GLIB_ST7920
+//#define U8GLIB_ST7920_HW
+// CS
 #define UI_DISPLAY_RS_PIN      62
+// MOSI
 #define UI_DISPLAY_ENABLE_PIN  75
+// SCK
 #define UI_DISPLAY_D4_PIN      76
 #define UI_DISPLAY_D5_PIN      -1
 #define UI_DISPLAY_D6_PIN      -1
@@ -298,7 +305,7 @@ void uiCheckSlowKeys(uint16_t &action) {}
 #undef SDCARDDETECTINVERTED
 #define SDCARDDETECTINVERTED   0
 
-#elif MOTHERBOARD == 414 // RURAMPS4D
+#elif ( MOTHERBOARD == 414 ) || ( MOTHERBOARD == 415 ) // RURAMPS4D
 
 #undef BEEPER_PIN
 #define BEEPER_PIN        62
@@ -318,6 +325,75 @@ void uiCheckSlowKeys(uint16_t &action) {}
 #define UI_ENCODER_CLICK 40
 #define UI_RESET_PIN -1
 #define UI_INVERT_MENU_DIRECTION 1
+
+#elif MOTHERBOARD == 402 // RADDS with RADDS2LCD Adapter 
+// https://www.thingiverse.com/thing:1740725/files
+#define BEEPER_TYPE 1
+#undef BEEPER_PIN
+#define BEEPER_PIN             41
+#define UI_DISPLAY_RS_PIN      42
+#define UI_DISPLAY_RW_PIN      -1
+#define UI_DISPLAY_ENABLE_PIN  43
+#define UI_DISPLAY_D0_PIN      44
+#define UI_DISPLAY_D1_PIN      45
+#define UI_DISPLAY_D2_PIN      46
+#define UI_DISPLAY_D3_PIN      47
+#define UI_DISPLAY_D4_PIN      44
+#define UI_DISPLAY_D5_PIN      45
+#define UI_DISPLAY_D6_PIN      46
+#define UI_DISPLAY_D7_PIN      47
+
+// swap these two numbers to invert rotary encoder scroll direction
+#define UI_ENCODER_A           50
+#define UI_ENCODER_B           52
+
+#define UI_ENCODER_CLICK       48
+#define UI_RESET_PIN           -1
+#define UI_DELAYPERCHAR 50
+#define UI_INVERT_MENU_DIRECTION 0
+#define UI_BUTTON_BACK         71
+
+#elif MOTHERBOARD == 403 || MOTHERBOARD == 404
+
+ // ramps-fd lcd adaptor needs to rotate connectors 180° to work!
+#define UI_DISPLAY_RS_PIN         16
+#define UI_DISPLAY_ENABLE_PIN     17
+#define UI_DISPLAY_D4_PIN         23
+#define UI_DISPLAY_D5_PIN         25
+#define UI_DISPLAY_D6_PIN         27
+#define UI_DISPLAY_D7_PIN         29
+#define BEEPER_PIN                37
+#define UI_ENCODER_A              33
+#define UI_ENCODER_B              31
+#define UI_ENCODER_CLICK          35
+#define UI_RESET_PIN              -1
+#define UI_DELAYPERCHAR 50
+#define UI_INVERT_MENU_DIRECTION   0
+#define UI_BUTTON_BACK            -1
+#undef SDCARDDETECT
+#define SDCARDDETECT           49
+#undef SDCARDDETECTINVERTED
+#define SDCARDDETECTINVERTED   0
+#undef SDSUPPORT
+#define SDSUPPORT              1
+
+#elif MOTHERBOARD == 408 || MOTHERBOARD == 413
+
+// SMART RAMPS FOR DUE - CRITICAL NOTE: MUST REMOVE THE RESET HEADER JUMPER NEXT TO AUX-2 OTHERWISE BOARD WILL RESET LOOP CONTINUOUSLY
+#define UI_DISPLAY_RS_PIN         44 //CS
+#define UI_DISPLAY_ENABLE_PIN     42 //MOSI
+#define UI_DISPLAY_D4_PIN         40 //SCK
+#define UI_DISPLAY_D5_PIN         -1 //A0 LCD RS
+#define UI_DISPLAY_D6_PIN         -1
+#define UI_DISPLAY_D7_PIN         -1
+#define BEEPER_PIN                66
+#define UI_ENCODER_A              50
+#define UI_ENCODER_B              47
+#define UI_ENCODER_CLICK          67
+#define UI_RESET_PIN              53
+#define UI_DELAYPERCHAR           50
+#define UI_INVERT_MENU_DIRECTION   0
+#define UI_BUTTON_BACK            -1
 
 #else  // RAMPS
 
@@ -1515,7 +1591,7 @@ void uiCheckSlowKeys(uint16_t &action) {}
 #endif
 #endif // Controller VIKI 2
 
-#if FEATURE_CONTROLLER == CONTROLLER_AZSMZ_12864
+#if FEATURE_CONTROLLER == CONTROLLER_AZSMZ_12864 || FEATURE_CONTROLLER == CONTROLLER_AZSMZ_12864_OLED
 #define UI_HAS_KEYS 1
 #define UI_HAS_BACK_KEY 0
 #define UI_DISPLAY_TYPE DISPLAY_U8G
@@ -1543,7 +1619,11 @@ void uiCheckSlowKeys(uint16_t &action) {}
 #define UI_ENCODER_SPEED 2
 //#define SDCARDDETECT        -1
 //#define UI_DISPLAY_RW_PIN -1
+#if FEATURE_CONTROLLER == CONTROLLER_AZSMZ_12864
 #define UI_ROTATE_180
+#endif
+
+
 
 #define BEEPER_TYPE 1
 
@@ -1555,6 +1635,7 @@ void uiCheckSlowKeys(uint16_t &action) {}
 
 #undef SDCARDDETECT
 #define SDCARDDETECT 49 // sd card detect as shown on drawing
+
 
 #undef BEEPER_PIN
 #define BEEPER_PIN         66
@@ -1587,7 +1668,7 @@ void uiInitKeys() {
     #endif
 }
 void uiCheckKeys(uint16_t &action) {
-    UI_KEYS_CLICKENCODER_LOW_REV(UI_ENCODER_B, UI_ENCODER_A);
+    UI_KEYS_CLICKENCODER_LOW_REV(UI_ENCODER_A, UI_ENCODER_B);
     UI_KEYS_BUTTON_LOW(UI_ENCODER_CLICK, UI_ACTION_OK);
     #if UI_RESET_PIN > -1
     UI_KEYS_BUTTON_LOW(UI_RESET_PIN, UI_ACTION_RESET);
@@ -1598,6 +1679,79 @@ void uiCheckSlowKeys(uint16_t &action) {}
 #endif
 #endif // Controller AZSMZ_12864
 
+#if (FEATURE_CONTROLLER == CONTROLLER_FYSETC_MINI_12864_V21)
+#define UI_HAS_KEYS 1
+#define UI_HAS_BACK_KEY 0
+#define UI_DISPLAY_TYPE DISPLAY_U8G
+#define U8GLIB_MINI12864_2X_HW_SPI
+#define UI_LCD_WIDTH 128
+#define UI_LCD_HEIGHT 64
+//select font size
+#define UI_FONT_6X10 //default font
+#ifdef UI_FONT_6X10
+#define UI_FONT_WIDTH 6
+#define UI_FONT_HEIGHT 10
+#define UI_FONT_SMALL_HEIGHT 7
+#define UI_FONT_DEFAULT repetier_6x10
+#define UI_FONT_SMALL repetier_5x7
+#define UI_FONT_SMALL_WIDTH 5 //smaller font for status display
+#endif
+//calculate rows and cols available with current font
+#define UI_COLS (UI_LCD_WIDTH/UI_FONT_SMALL_WIDTH)
+#define UI_ROWS (UI_LCD_HEIGHT/UI_FONT_HEIGHT)
+#define UI_DISPLAY_CHARSET 3
+
+#define BEEPER_TYPE 1
+
+#if MOTHERBOARD == 190  // Fysetc F6
+#define BEEPER_PIN             37
+#define UI_DISPLAY_RESET_PIN   23
+#define UI_DISPLAY_RS_PIN      17
+#define UI_DISPLAY_RW_PIN      -1
+#define UI_DISPLAY_ENABLE_PIN  51
+#define UI_DISPLAY_D0_PIN      -1
+#define UI_DISPLAY_D1_PIN      -1
+#define UI_DISPLAY_D2_PIN      -1
+#define UI_DISPLAY_D3_PIN      -1
+#define UI_DISPLAY_D4_PIN      52
+#define UI_DISPLAY_D5_PIN      16
+#define UI_DISPLAY_D6_PIN      -1
+#define UI_DISPLAY_D7_PIN      -1
+#define UI_ENCODER_A           33
+#define UI_ENCODER_B           31
+#define UI_ENCODER_CLICK       35
+#define UI_RESET_PIN           41
+#define LCD_CONTRAST           255
+#define UI_INVERT_MENU_DIRECTION   0
+#define UI_ENCODER_SPEED 2
+
+#else
+
+// Untested configuration for the other motherboards. Please adapt the pin mappings.
+// The board connectors and pin mappings could be compatible with e.g. RAMPS but needs testing.
+#error The Fysetc Mini 12864 pin mappings must be adapted to your motherboard in the DisplayList.h
+
+#endif
+
+#ifdef UI_MAIN
+void uiInitKeys() {
+  UI_KEYS_INIT_CLICKENCODER_LOW(UI_ENCODER_A, UI_ENCODER_B); // click encoder on pins 47 and 45. Phase is connected with gnd for signals.
+  UI_KEYS_INIT_BUTTON_LOW(UI_ENCODER_CLICK); // push button, connects gnd to pin
+#if UI_RESET_PIN > -1
+  UI_KEYS_INIT_BUTTON_LOW(UI_RESET_PIN); // Kill pin
+#endif
+}
+void uiCheckKeys(uint16_t &action) {
+  UI_KEYS_CLICKENCODER_LOW(UI_ENCODER_A, UI_ENCODER_B); // click encoder on pins 47 and 45. Phase is connected with gnd for signals.
+  UI_KEYS_BUTTON_LOW(UI_ENCODER_CLICK, UI_ACTION_OK); // push button, connects gnd to pin
+#if UI_RESET_PIN > -1
+  UI_KEYS_BUTTON_LOW(UI_RESET_PIN, UI_ACTION_RESET);
+#endif
+}
+inline void uiCheckSlowEncoder() {}
+void uiCheckSlowKeys(uint16_t &action) {}
+#endif
+#endif // Fysetc Mini 12864 v2.1 Panel
 
 #if FEATURE_CONTROLLER == CONTROLLER_LCD_MP_PHARAOH_DUE
 #define UI_DISPLAY_TYPE 1
@@ -1809,6 +1963,7 @@ inline void uiCheckSlowKeys(uint16_t &action) {}
 #define UI_STATUS_UPD_F(status) {uid.setStatusP(status);uid.refreshPage();}
 #define UI_STATUS_RAM(status) uid.setStatus(status);
 #define UI_STATUS_UPD_RAM(status) {uid.setStatus(status);uid.refreshPage();}
+#define UI_PROGRESS_UPD(percent, eta) uid.setProgress(percent, eta);
 #define UI_ERROR(status) uid.setStatusP(PSTR(status),true);
 #define UI_ERROR_P(status) uid.setStatusP(status,true);
 #define UI_ERROR_UPD(status) {uid.setStatusP(PSTR(status),true);uid.refreshPage();}
@@ -1830,6 +1985,7 @@ inline void uiCheckSlowKeys(uint16_t &action) {}
 #define UI_STATUS_UPD(status) {}
 #define UI_STATUS_UPD_F(status) {}
 #define UI_STATUS_UPD_RAM(status) {}
+#define UI_PROGRESS_UPD(percent, eta) {}
 #define UI_CLEAR_STATUS {}
 #define UI_ERROR(msg) {}
 #define UI_ERROR_P(status) {}
@@ -1852,6 +2008,7 @@ inline void uiCheckSlowKeys(uint16_t &action) {}
 
 
 extern void beep(uint8_t duration, uint8_t count);
+#ifdef UI_MAIN
 #if (defined(USER_KEY1_PIN) && USER_KEY1_PIN > -1 && defined(USER_KEY1_ACTION)) || (defined(USER_KEY2_PIN) && USER_KEY2_PIN > -1 && defined(USER_KEY2_ACTION)) || (defined(USER_KEY3_PIN) && USER_KEY3_PIN > -1 && defined(USER_KEY3_ACTION)) || (defined(USER_KEY4_PIN) && USER_KEY4_PIN > -1 && defined(USER_KEY4_ACTION))
 #define HAS_USER_KEYS
 static void ui_check_Ukeys(uint16_t &action) {
@@ -1869,6 +2026,6 @@ static void ui_check_Ukeys(uint16_t &action) {
     #endif
 }
 #endif
-
+#endif
 
 #endif

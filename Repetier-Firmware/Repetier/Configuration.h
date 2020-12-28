@@ -27,7 +27,7 @@
    to see and change the data. You can also upload it to newer/older versions. The system
    will silently add new options, so compilation continues to work.
 
-   This file is optimized for version 1.0.3
+   This file is optimized for version 1.0.4dev
    generator: http://www.repetier.com/firmware/dev/
 
    If you are in doubt which named functions use which pins on your board, please check the
@@ -44,6 +44,7 @@
 
 // ################ END MANUAL SETTINGS ##########################
 
+#define HOST_RESCUE 1
 #undef FAN_BOARD_PIN
 #define FAN_BOARD_PIN -1
 #define BOARD_FAN_SPEED 255
@@ -72,7 +73,7 @@
 #define PDM_FOR_EXTRUDER 0
 #define PDM_FOR_COOLER 0
 #define DECOUPLING_TEST_MAX_HOLD_VARIANCE 20
-#define DECOUPLING_TEST_MIN_TEMP_RISE 1
+#define DECOUPLING_TEST_MIN_TEMP_RISE 0
 #define KILL_IF_SENSOR_DEFECT 0
 #define RETRACT_ON_PAUSE 2
 #define PAUSE_START_COMMANDS ""
@@ -81,7 +82,7 @@
 #define EXT0_X_OFFSET 0
 #define EXT0_Y_OFFSET 0
 #define EXT0_Z_OFFSET 0
-#define EXT0_STEPS_PER_MM 111.861
+#define EXT0_STEPS_PER_MM 159
 #define EXT0_TEMPSENSOR_TYPE 5
 #define EXT0_TEMPSENSOR_PIN TEMP_0_PIN
 #define EXT0_HEATER_PIN HEATER_0_PIN
@@ -157,6 +158,7 @@
 #define USER_THERMISTORTABLE2 {}
 #define GENERIC_THERM_VREF 5
 #define GENERIC_THERM_NUM_ENTRIES 33
+#define TEMP_GAIN 0
 #define HEATER_PWM_SPEED 0
 #define COOLER_PWM_SPEED 0
 
@@ -556,6 +558,7 @@ WARNING: Servos can draw a considerable amount of current. Make sure your system
 #define LANGUAGE_CZ_ACTIVE 0
 #define LANGUAGE_PL_ACTIVE 1
 #define LANGUAGE_TR_ACTIVE 1
+#define LANGUAGE_RU_ACTIVE 0
 #define UI_PRINTER_NAME "RepRap"
 #define UI_PRINTER_COMPANY "Home made"
 #define UI_PAGES_DURATION 4000
@@ -600,7 +603,7 @@ Values must be in range 1..255
 
 ========== Start configuration string ==========
 {
-    "editMode": 0,
+    "editMode": 1,
     "processor": 0,
     "baudrate": 115200,
     "bluetoothSerial": -1,
@@ -644,7 +647,7 @@ Values must be in range 1..255
             "waitRetractTemp": 150,
             "waitRetractUnits": 0,
             "waitRetract": 0,
-            "stepsPerMM": 111.861,
+            "stepsPerMM": 159,
             "coolerPin": -1,
             "coolerSpeed": 255,
             "selectCommands": "",
@@ -894,97 +897,97 @@ Values must be in range 1..255
             {
                 "t": 300,
                 "r": 105,
-                "adc": 42.550717466601
+                "adc": 42.550717466600695
             },
             {
                 "t": 280,
                 "r": 141,
-                "adc": 56.936692633863
+                "adc": 56.936692633862535
             },
             {
                 "t": 260,
                 "r": 194,
-                "adc": 77.931135962331
+                "adc": 77.93113596233079
             },
             {
                 "t": 240,
                 "r": 273,
-                "adc": 108.82264187676
+                "adc": 108.82264187676434
             },
             {
                 "t": 225,
                 "r": 360,
-                "adc": 142.2972972973
+                "adc": 142.2972972972973
             },
             {
                 "t": 220,
                 "r": 396,
-                "adc": 155.98499422855
+                "adc": 155.98499422854945
             },
             {
                 "t": 215,
                 "r": 437,
-                "adc": 171.45875251509
+                "adc": 171.45875251509054
             },
             {
                 "t": 210,
                 "r": 483,
-                "adc": 188.67547457789
+                "adc": 188.675474577888
             },
             {
                 "t": 205,
                 "r": 533,
-                "adc": 207.2187410994
+                "adc": 207.21874109940188
             },
             {
                 "t": 185,
                 "r": 643,
-                "adc": 247.4006389176
+                "adc": 247.40063891759843
             },
             {
                 "t": 190,
                 "r": 719,
-                "adc": 274.68094038623
+                "adc": 274.6809403862301
             },
             {
                 "t": 185,
                 "r": 797,
-                "adc": 302.27979994443
+                "adc": 302.279799944429
             },
             {
                 "t": 180,
                 "r": 896,
-                "adc": 336.74008810573
+                "adc": 336.7400881057269
             },
             {
                 "t": 175,
                 "r": 997,
-                "adc": 371.25716104392
+                "adc": 371.2571610439211
             },
             {
                 "t": 160,
                 "r": 1414,
-                "adc": 507.3006833713
+                "adc": 507.3006833712984
             },
             {
                 "t": 140,
                 "r": 2271,
-                "adc": 757.86366229321
+                "adc": 757.8636622932116
             },
             {
                 "t": 120,
                 "r": 3850,
-                "adc": 1138.321299639
+                "adc": 1138.321299638989
             },
             {
                 "t": 100,
                 "r": 6710,
-                "adc": 1644.3716337522
+                "adc": 1644.3716337522442
             },
             {
                 "t": 80,
                 "r": 12540,
-                "adc": 2278.2298136646
+                "adc": 2278.2298136645963
             },
             {
                 "t": 60,
@@ -994,17 +997,17 @@ Values must be in range 1..255
             {
                 "t": 40,
                 "r": 53500,
-                "adc": 3450.1181102362
+                "adc": 3450.1181102362207
             },
             {
                 "t": 25,
                 "r": 100000,
-                "adc": 3722.7272727273
+                "adc": 3722.7272727272725
             },
             {
                 "t": 1,
                 "r": 311039,
-                "adc": 3967.4454038294
+                "adc": 3967.445403829441
             }
         ],
         "numEntries": 23
@@ -1099,7 +1102,7 @@ Values must be in range 1..255
     "psOn": -1,
     "mixingExtruder": "0",
     "decouplingTestMaxHoldVariance": 20,
-    "decouplingTestMinTempRise": 1,
+    "decouplingTestMinTempRise": 0,
     "featureAxisComp": "0",
     "axisCompTanXY": 0,
     "axisCompTanXZ": 0,
@@ -1273,6 +1276,7 @@ Values must be in range 1..255
     "langCZ": "0",
     "langPL": "1",
     "langTR": "1",
+    "langRU": "0",
     "interpolateAccelerationWithZ": 0,
     "accelerationFactorTop": 100,
     "bendingCorrectionA": 0,
@@ -1351,12 +1355,16 @@ Values must be in range 1..255
     "TMC2130CSE0": -1,
     "TMC2130CSE1": -1,
     "TMC2130CSE2": -1,
+    "TMC2130CSE3": -1,
+    "TMC2130CSE4": -1,
     "TMC2130CurrentX": 1000,
     "TMC2130CurrentY": 1000,
     "TMC2130CurrentZ": 1000,
     "TMC2130CurrentE0": 1000,
     "TMC2130CurrentE1": 1000,
     "TMC2130CurrentE2": 1000,
+    "TMC2130CurrentE3": 1000,
+    "TMC2130CurrentE4": 1000,
     "TMC2130CoolstepTresholdX": 300,
     "TMC2130CoolstepTresholdY": 300,
     "TMC2130CoolstepTresholdZ": 300,
@@ -1366,9 +1374,16 @@ Values must be in range 1..255
     "microstepE0": 16,
     "microstepE1": 16,
     "microstepE2": 16,
+    "microstepE3": 16,
+    "microstepE4": 16,
     "parkPosX": 0,
     "parkPosY": 0,
     "parkPosZ": 10,
+    "emergencyParser": -1,
+    "hostRescue": "1",
+    "MAX31855SwCS": -1,
+    "MAX31855SwCLK": -1,
+    "tempGain": "0",
     "maxHalfstepInterval": 1999,
     "uiAnimation": "1",
     "uiPresetBedTempPLA": 60,
@@ -1384,8 +1399,9 @@ Values must be in range 1..255
     "hasUser1": false,
     "hasUser2": false,
     "numExtruder": 1,
-    "version": 100.2,
-    "primaryPortName": ""
+    "version": 100.4,
+    "primaryPortName": "",
+    "hasMAX31855SW": false
 }
 ========== End configuration string ==========
 
